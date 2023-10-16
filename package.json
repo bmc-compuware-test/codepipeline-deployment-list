@@ -1,0 +1,40 @@
+{
+  "name": "code-pipeline-generate",
+  "version": "1.0.0",
+  "description": "GitHub action to execute a BMC AMI DevX Workbench Code Pipeline generate",
+  "publisher": "BMC",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "ncc build index.js -o dist",
+    "lint": "npx eslint ./**.js --fix",
+    "test": "nyc --all=true --exclude=\"dist/**\" --exclude=\"coverage/**\" --exclude=\"test/**\" --reporter=json --reporter=text mocha",
+    "coverage": "nyc check-coverage --lines 60 --branches 75 --statements 60 --functions 60",
+    "check": "npm run lint && npm run build && npm run test && npm run coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bmc-compuware/ispw-generate.git"
+  },
+  "keywords": ["ISPW", "Compuware", "BMC", "AMI", "DevX", "generate", "code-pipeline"],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bmc-compuware/ispw-generate/issues"
+  },
+  "homepage": "https://github.com/bmc-compuware/ispw-generate#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.7",
+    "@actions/github": "^4.0.0",
+    "@bmc-compuware/ispw-action-utilities": "^1.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^7.25.0",
+    "eslint-config-google": "^0.14.0",
+    "esm": "^3.2.25",
+    "mocha": "^8.3.2",
+    "nock": "^13.0.11",
+    "nyc": "^15.1.0"
+  }
+}
