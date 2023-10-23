@@ -22,7 +22,7 @@ try
   let inputs = ['ces_url', 'ces_token', 'srid', 'todaysDate', 'priorWeek', 'startDate', 'endDate',
   'requestId', 'setId', 'environment', 'status'];
   inputs = utils.retrieveInputs(core, inputs);
-  core.debug('Code Pipeline: parsed inputs: ' + utils.convertObjectToJson(inputs));
+  core.info('Code Pipeline: parsed inputs: ' + utils.convertObjectToJson(inputs));
 
   /*
   if (utils.stringHasContent(inputs.generate_automatically)) {
@@ -33,7 +33,7 @@ try
     console.log('Generate parameters are being retrieved from the inputs.');
     buildParms = getParmsFromInputs(inputs.assignment_id, inputs.level, inputs.task_id);
   }
-  core.debug('Code Pipeline: parsed buildParms: ' + utils.convertObjectToJson(buildParms));
+  core.info('Code Pipeline: parsed buildParms: ' + utils.convertObjectToJson(buildParms));
 
   //const requiredFields = ['containerId', 'taskLevel', 'taskIds'];
   if (!utils.validateBuildParms(buildParms, requiredFields)) {
@@ -46,15 +46,16 @@ try
   //const reqUrl = utils.assembleRequestUrl(inputs.ces_url, reqPath);
   let reqPath = `/ispw/${inputs.srid}/deployments`;
   const reqUrl = prepareRequestUrl(inputs.ces_url, reqPath);
-  core.debug('Code Pipeline: request url: ' + reqUrl.href); 
-  core.debug('Code Pipeline: request url: ' + reqUrl); 
+  core.info('Code Pipeline: request url: ' + reqUrl.href); 
+  core.info('Code Pipeline: request url: ' + reqUrl); 
   const reqBodyObj = prepareRequestBodyObject(inputs.todaysDate, inputs.priorWeek, inputs.startDate,
      inputs.endDate, inputs.requestId,inputs.setId, inputs.environment, inputs.status);
-  core.debug('Code Pipeline: reqBodyObj : ' + reqBodyObj); 
-
+  core.info('Code Pipeline: reqBodyObj : ' + reqBodyObj); 
+  core.info('Code Pipeline: reqBodyObj : ' + reqBodyObj); 
+  core.info('Code Pipeline: token : ' + inputs.ces_token);
   getHttpGetPromise(reqUrl, inputs.ces_token, reqBodyObj)
       .then((response) => {
-        core.debug('Code Pipeline: received response body: ' +
+        core.info('Code Pipeline: received response body: ' +
          utils.convertObjectToJson(response.data));
         // generate could have passed or failed
         setOutputs(core, response.data);
@@ -63,8 +64,8 @@ try
       (error) => {
         // there was a problem with the request to CES
         if (error.response !== undefined) {
-          core.debug('Code Pipeline: received error code: ' + error.response.status);
-          core.debug('Code Pipeline: received error response body: ' +
+          core.info('Code Pipeline: received error code: ' + error.response.status);
+          core.info('Code Pipeline: received error response body: ' +
             utils.convertObjectToJson(error.response.data));
           setOutputs(core, error.response.data);
           throw new GenerateFailureException(error.response.data.message);
@@ -73,7 +74,7 @@ try
       })
       .then(() => console.log('The deployment list request completed successfully.'),
           (error) => {
-            core.debug(error.stack);
+            core.info(error.stack);
             core.setFailed(error.message);
           });
 
@@ -86,7 +87,7 @@ try
     // no need to fail the action if the generate is never attempted
     console.log(error.message);
   } else {
-    core.debug(error.stack);
+    core.info(error.stack);
     console.error('An error occurred while starting the generate');
     core.setFailed(error.message);
   }
