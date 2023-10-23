@@ -28,7 +28,7 @@ try
   }
   core.debug('Code Pipeline: parsed buildParms: ' + utils.convertObjectToJson(buildParms));
 
-  const requiredFields = ['containerId', 'taskLevel', 'taskIds'];
+  //const requiredFields = ['containerId', 'taskLevel', 'taskIds'];
   if (!utils.validateBuildParms(buildParms, requiredFields)) {
     throw new MissingArgumentException(
         'Inputs required for Code Pipeline Generate are missing. ' +
@@ -72,7 +72,7 @@ try
 
   // the following code will execute after the HTTP request was started,
   // but before it receives a response.
-  console.log('Starting the generate process for task ' + buildParms.taskIds.toString());
+  //console.log('Starting the generate process for task ' + buildParms.taskIds.toString());
 } catch (error) {
   if (error instanceof MissingArgumentException) {
     // this would occur if there was nothing to load during the sync process
