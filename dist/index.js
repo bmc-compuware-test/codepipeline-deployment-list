@@ -14,6 +14,7 @@
 */
 const core = __nccwpck_require__(6039);
 const utils = __nccwpck_require__(7801);
+const axios = (__nccwpck_require__(3739)["default"]);
 
 try 
 {
@@ -89,6 +90,23 @@ try
     console.error('An error occurred while starting the generate');
     core.setFailed(error.message);
   }
+}
+
+/**
+ * Gets a promise for sending an http POST request
+ * @param {URL} requestUrl the URL to send hte request to
+ * @param {string} token the token to use during authentication
+ * @param {*} requestBody the request body object
+ * @return {Promise} the Promise for the request
+ */
+function getHttpGetPromise(requestUrl, token, requestBody) {
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': token,
+    },
+  };
+  return axios.get(requestUrl.href, requestBody, options);
 }
 
 function prepareRequestUrl(cesUrl, requestPath) 
