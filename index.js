@@ -11,7 +11,7 @@ const utils = require('@bmc-compuware/ispw-action-utilities');
 
 try 
 {
-  //let buildParms;
+  let buildParms;
   let inputs = ['ces_url', 'ces_token', 'srid', 'todaysDate', 'priorWeek', 'startDate', 'endDate',
   'requestId', 'setId', 'environment', 'status'];
   inputs = utils.retrieveInputs(core, inputs);
@@ -291,7 +291,7 @@ module.exports = {
   getParmsFromInputs,
   setOutputs,
   getGenerateAwaitUrlPath,
-  assembleRequestBodyObject,
+  prepareRequestBodyObject,
   handleResponseBody,
   MissingArgumentException,
   GenerateFailureException,
