@@ -108,6 +108,7 @@ function getHttpGetPromise(requestUrl, token, requestBody) {
     },
   };
   core.info('Jalaj requestUrl.href: ' + requestUrl.href );
+  core.info('Jalaj options: ' + options);
   core.info('Jalaj options 0: ' + options.headers[0] );
   core.info('Jalaj options 1: ' + options.headers[1] );
   return axios.get(requestUrl.href, requestBody, options);
