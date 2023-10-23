@@ -1,5 +1,5 @@
 name: 'Code Pipeline Deployment List'
-description: 'Run a mainframe generate using Code Pipeline.'
+description: 'Retrieves ISPW deployments using optional filter criteria. Potentially, large amounts of data may be returned from the deployments API. This API has a limit of 5000 records. You should attempt to set as many query parameters as possible to reduce the number of items returned.'
 branding:
   icon: play
   color: orange
@@ -13,48 +13,31 @@ inputs:
   srid:
     description: 'The ID for the instance of Code Pipeline to connect to'
     required: true
-  runtime_configuration:
-    description: 'The runtime configuration used when connecting to Code Pipeline'
+  todaysDate:
+    description: 'True/False value indicating whether or not to include today's date deployments. This field is not case sensitive.'
     required: false
-  assignment_id:
-    description: 'The container for which you intend to generate tasks.'
+  priorWeek:
+    description: 'True/False value indicating whether or not to include prior week deployments. This field is not case sensitive. The default value is true.'
     required: false
-  level:
-    description: 'The level that the tasks exist at in the assignment'
+  startDate:
+    description: 'Deployment start date/time in yyyy-mm-dd format when the set will be dispatched for execution.'
     required: false
-  task_id:
-    description: 'The comma-separated list of task IDs for the tasks that need to be generated'
+  endDate:
+    description: 'Deployment end date/time in yyyy-mm-dd format.'
     required: false
-  generate_automatically:
-    description: 'The request parameters for the generate will come from JSON passed in this input. This option is only valid when used in combination with a Git to Code Pipeline Integration step'
+  requestId:
+    description: 'A unique numerical id assigned to this deployment request. Wildcard * is not supported.'
     required: false
-  change_type: 
-    description: 'S for standard, I for incidental, or E for emergency. Default value of S'
+  setId: 
+    description: 'The set ID you want information on. This field is case sensitive. Wildcard * is only supported.'
     required: false
-    default: 'S'
-  execution_status:
-    description: 'I for immediate execution or at start date/time, H to create request in hold'
+  environment:
+    description: 'The logical execution environment where the components will be deployed for this request. This field is not case sensitive. Wildcard * is only supported.'
     required: false
-    default: 'I'
-  auto_deploy:
-    description: 'Generates can be set up to automatically Deploy as well by an option set up by the Code Pipeline. The default is to not use Auto Deploy. If the Auto Deploy option is set-up through Code Pipeline, then you may use this option to automatically deploy instead of using the deployAutomatically option within the DeployTask/DeployAssignment/DeployRelease actions'
-    required: true
-    default: 'false'
+  status:
+    description: 'The overall current status of the deploy request, which may be Planned, Confirmed, Staged, Implemented, Completed, Failed, or Terminated. This field is not case sensitive. Wildcard * is only supported.'
+    required: false
 outputs:
-  generate_failed_count:
-    description: 'The number of tasks that failed to generate'
-  generate_success_count:
-    description: 'The number of tasks that generated successfully'
-  has_failures:
-    description: 'Whether there were any generate failures'
-  is_timed_out:
-    description: 'Whether the generate timed out'
-  task_count:
-    description: 'The total number of tasks a generate was initiated against'
-  set_id:
-    description: 'The ID of the set that was used for processing'
-  url:
-    description: 'The URL that can be used to retrieve information about the set that was used for processing'
   output_json:
     description: 'the JSON output from build'
 runs:

@@ -3,19 +3,21 @@
 * SOFTWARE, INC. ALL OTHER COMPANY PRODUCT NAMES ARE TRADEMARKS OF THEIR
 * RESPECTIVE OWNERS.
 *
-* (c) Copyright 2021 BMC Software, Inc.
+* (c) Copyright 2023 BMC Software, Inc.
 * This code is licensed under MIT license (see LICENSE.txt for details)
 */
 const core = require('@actions/core');
 const utils = require('@bmc-compuware/ispw-action-utilities');
 
-try {
-  let buildParms;
-  let inputs = ['generate_automatically', 'assignment_id', 'level', 'task_id', 'ces_url',
-    'ces_token', 'srid', 'runtime_configuration', 'change_type', 'execution_status', 'auto_deploy'];
+try 
+{
+  //let buildParms;
+  let inputs = ['ces_url', 'ces_token', 'srid', 'todaysDate', 'priorWeek', 'startDate', 'endDate',
+  'requestId', 'setId', 'environment', 'status'];
   inputs = utils.retrieveInputs(core, inputs);
   core.debug('Code Pipeline: parsed inputs: ' + utils.convertObjectToJson(inputs));
 
+  /*
   if (utils.stringHasContent(inputs.generate_automatically)) {
     console.log('Generate parameters are being retrieved from the ' +
       'generate_automatically input.');
@@ -31,14 +33,17 @@ try {
     throw new MissingArgumentException(
         'Inputs required for Code Pipeline Generate are missing. ' +
       '\nSkipping the generate request....');
-  }
+  }*/
 
-  const reqPath = getGenerateAwaitUrlPath(inputs.srid, buildParms);
-  const reqUrl = utils.assembleRequestUrl(inputs.ces_url, reqPath);
-  core.debug('Code Pipeline: request url: ' + reqUrl.href);
-
-  const reqBodyObj = assembleRequestBodyObject(inputs.runtime_configuration,
-      inputs.change_type, inputs.execution_status, inputs.auto_deploy);
+  //const reqPath = getGenerateAwaitUrlPath(inputs.srid, buildParms);
+  //const reqUrl = utils.assembleRequestUrl(inputs.ces_url, reqPath);
+  let reqPath = `/ispw/${inputs.srid}/deployments`;
+  const reqUrl = prepareRequestUrl(inputs.ces_url, reqPath);
+  core.debug('Code Pipeline: request url: ' + reqUrl.href); 
+  core.debug('Code Pipeline: request url: ' + reqUrl); 
+  const reqBodyObj = prepareRequestBodyObject(inputs.todaysDate, inputs.priorWeek, inputs.startDate,
+     inputs.endDate, inputs.requestId,inputs.setId, inputs.environment, inputs.status);
+  core.debug('Code Pipeline: reqBodyObj : ' + reqBodyObj); 
 
   utils.getHttpPostPromise(reqUrl, inputs.ces_token, reqBodyObj)
       .then((response) => {
@@ -59,7 +64,7 @@ try {
         }
         throw error;
       })
-      .then(() => console.log('The generate request completed successfully.'),
+      .then(() => console.log('The deployment list request completed successfully.'),
           (error) => {
             core.debug(error.stack);
             core.setFailed(error.message);
@@ -78,6 +83,35 @@ try {
     console.error('An error occurred while starting the generate');
     core.setFailed(error.message);
   }
+}
+
+function prepareRequestUrl(cesUrl, requestPath) 
+{
+  let lowercaseUrl = cesUrl.toLowerCase();
+  
+  // remove trailing '/compuware' from url, if it exists
+  const cpwrIndex = lowercaseUrl.lastIndexOf('/compuware');
+  if (cpwrIndex > 0) 
+  {
+    cesUrl = cesUrl.substr(0, cpwrIndex);
+  }
+
+  // remove trailing '/bmc' from url, if it exists
+  const bmcIndex = lowercaseUrl.lastIndexOf('/bmc');
+  if (bmcIndex > 0) 
+  {
+    cesUrl = cesUrl.substr(0, bmcIndex);
+  }
+    
+  // remove trailing slash
+  if (cesUrl.endsWith('/')) 
+  {
+    cesUrl = cesUrl.substr(0, cesUrl.length - 1);
+  }
+
+  const tempUrlStr = cesUrl.concat(requestPath);
+  const url = new URL(tempUrlStr);
+  return url;
 }
 
 /** *****************************************************************************************/
@@ -153,7 +187,7 @@ function getGenerateAwaitUrlPath(srid, buildParms) {
 }
 
 /**
- * Assembles an object for the CES request body.
+ * Prepares an object for the CES request body.
  * @param  {string | undefined} runtimeConfig the runtime configuration passed
  * in the inputs
  * @param  {string | undefined} changeType the change type passed in the inputs
@@ -162,20 +196,42 @@ function getGenerateAwaitUrlPath(srid, buildParms) {
  * @param  {string | undefined} autoDeploy whether to auto deploy
  * @return {any} an object with all the fields for the request body filled in
  */
-function assembleRequestBodyObject(runtimeConfig, changeType,
-    executionStatus, autoDeploy) {
-  const requestBody = {};
-  if (utils.stringHasContent(runtimeConfig)) {
-    requestBody.runtimeConfig = runtimeConfig;
-  }
-  if (utils.stringHasContent(changeType)) {
-    requestBody.changeType = changeType;
-  }
-  if (utils.stringHasContent(executionStatus)) {
-    requestBody.execStat = executionStatus;
-  }
-  requestBody.autoDeploy = (autoDeploy === 'true');
-
+function prepareRequestBodyObject(todaysDate, priorWeek, startDate,
+  endDate, requestId, setId, environment, status) 
+  {
+    const requestBody = {};
+    if (utils.stringHasContent(todaysDate)) 
+    {
+      requestBody.todaysDate = todaysDate;
+    }
+    if (utils.stringHasContent(priorWeek)) 
+    {
+      requestBody.priorWeek = priorWeek;
+    }
+    if (utils.stringHasContent(startDate)) 
+    {
+      requestBody.startDate = startDate;
+    }
+    if (utils.stringHasContent(endDate)) 
+    {
+      requestBody.endDate = endDate;
+    }
+    if (utils.stringHasContent(requestId)) 
+    {
+      requestBody.requestId = requestId;
+    }
+    if (utils.stringHasContent(setId)) 
+    {
+      requestBody.setId = setId;
+    }
+    if (utils.stringHasContent(environment)) 
+    {
+      requestBody.environment = environment;
+    }
+    if (utils.stringHasContent(status))
+    {
+      requestBody.status = status;
+    }
   return requestBody;
 }
 
