@@ -101,6 +101,8 @@ try
  * @return {Promise} the Promise for the request
  */
 function getHttpGetPromise(requestUrl, token, requestBody) {
+  core.info('Jalaj requestUrl.href: ' + requestUrl.href );
+  core.info('Jalaj token: ' + token);
   const options = {
     headers: {
       'Content-Type': 'application/json',
