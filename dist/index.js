@@ -52,7 +52,7 @@ try
      inputs.endDate, inputs.requestId,inputs.setId, inputs.environment, inputs.status);
   core.debug('Code Pipeline: reqBodyObj : ' + reqBodyObj); 
 
-  utils.getHttpPostPromise(reqUrl, inputs.ces_token, reqBodyObj)
+  getHttpGetPromise(reqUrl, inputs.ces_token, reqBodyObj)
       .then((response) => {
         core.debug('Code Pipeline: received response body: ' +
          utils.convertObjectToJson(response.data));
