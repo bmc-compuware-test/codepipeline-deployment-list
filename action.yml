@@ -14,7 +14,7 @@ inputs:
     description: 'The ID for the instance of Code Pipeline to connect to'
     required: true
   todaysDate:
-    description: 'True/False value indicating whether or not to include today's date deployments. This field is not case sensitive.'
+    description: 'True/False value indicating whether or not to include todays date deployments. This field is not case sensitive.'
     required: false
   priorWeek:
     description: 'True/False value indicating whether or not to include prior week deployments. This field is not case sensitive. The default value is true.'
