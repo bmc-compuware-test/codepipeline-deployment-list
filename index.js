@@ -101,7 +101,7 @@ function prepareRequestQueryPath(inputs)
   }
   if(requestQueryPath.endsWith('&') || requestQueryPath.endsWith('?') || requestQueryPath.endsWith('?&') )
   {
-    requestQueryPath = requestQueryPath.substring(0, cesUrl.length - 1);
+    requestQueryPath = requestQueryPath.substring(0, requestQueryPath.length - 1);
   }
   core.info('Code Pipeline: Request Query Url PAth: ' + requestQueryPath);
 }
