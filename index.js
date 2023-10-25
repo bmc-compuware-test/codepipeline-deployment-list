@@ -116,27 +116,27 @@ function prepareRequestQueryPath(inputs)
   let requestQueryPath ="?";
   if (utils.stringHasContent(inputs.startDate)) 
   {
-    requestQueryPath.concat(`startDate=${inputs.startDate}&`);
+    requestQueryPath= requestQueryPath.concat(`startDate=${inputs.startDate}&`);
   }
   if (utils.stringHasContent(inputs.endDate)) 
   {
-    requestQueryPath.concat(`endDate=${inputs.endDate}&`);
+    requestQueryPath= requestQueryPath.concat(`endDate=${inputs.endDate}&`);
   }
   if (utils.stringHasContent(inputs.requestId)) 
   {
-    requestQueryPath.concat(`requestId=${inputs.requestId}&`);
+    requestQueryPath= requestQueryPath.concat(`requestId=${inputs.requestId}&`);
   }
   if (utils.stringHasContent(inputs.setId)) 
   {
-    requestQueryPath.concat(`setId=${inputs.setId}&`);
+    requestQueryPath=requestQueryPath.concat(`setId=${inputs.setId}&`);
   }
   if (utils.stringHasContent(inputs.environment)) 
   {
-    requestQueryPath.concat(`environment=${inputs.environment}&`);
+    requestQueryPath=requestQueryPath.concat(`environment=${inputs.environment}&`);
   }
   if (utils.stringHasContent(inputs.status)) 
   {
-    requestQueryPath.concat(`status=${inputs.status}&`);
+    requestQueryPath=requestQueryPath.concat(`status=${inputs.status}&`);
   }
   if(requestQueryPath.endsWith('&') || requestQueryPath.endsWith('?') || requestQueryPath.endsWith('?&') )
   {
