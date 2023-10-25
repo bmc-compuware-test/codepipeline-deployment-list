@@ -104,6 +104,7 @@ function prepareRequestQueryPath(inputs)
     requestQueryPath = requestQueryPath.substring(0, requestQueryPath.length - 1);
   }
   core.info('Code Pipeline: Request Query Url PAth: ' + requestQueryPath);
+  return requestQueryPath;
 }
 
 function prepareRequestUrl(cesUrl, requestBasePath, requestQueryPath) 
