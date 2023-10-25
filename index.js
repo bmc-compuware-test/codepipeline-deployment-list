@@ -73,12 +73,14 @@ catch (error)
 
 function validateRequiredParms(requiredFields, inputs) {
   requiredFields.forEach((field) => {
-    if (!stringHasContent(inputs.field)) {
+    if (!utils.stringHasContent(inputs.field)) {
       isValid = false;
-      console.error(getMissingInputMessage(field));
+      console.error(`Missing input:${field} must be specified.`);
+      //console.error(getMissingInputMessage(field));
     }
   });
 }
+
 /**
  * Gets a promise for sending an http GET request
  * @param {URL} requestUrl the URL to send hte request to
