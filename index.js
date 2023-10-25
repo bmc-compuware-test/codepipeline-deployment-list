@@ -173,7 +173,7 @@ function handleResponseBody(responseBody) {
   else 
   {
     // success
-    console.log(utils.getStatusMessageToPrint(responseBody.awaitStatus.statusMsg));
+    //console.log(utils.getStatusMessageToPrint(responseBody.awaitStatus.statusMsg));
     return responseBody;
   }
 }
