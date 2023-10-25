@@ -61,7 +61,6 @@ catch (error)
 {
   if (error instanceof MissingArgumentException) 
   {
-    console.log(error.message);
     core.setFailed(error.message);
   } 
   else 
@@ -213,7 +212,6 @@ function handleResponseBody(responseBody) {
   else 
   {
     // success
-    utils.validateBuildParms(buildParms, requiredFields)
     return responseBody;
   }
 }
