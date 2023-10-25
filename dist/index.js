@@ -22,6 +22,14 @@ try
   'requestId', 'setId', 'environment', 'status'];
   inputs = utils.retrieveInputs(core, inputs);
   core.info('Code Pipeline: parsed inputs: ' + utils.convertObjectToJson(inputs));
+  
+  const requiredFields = ['ces_url', 'ces_token', 'srid'];
+  if (!validateRequiredParms(requiredFields, inputs)) 
+  {
+    throw new MissingArgumentException(
+        'Inputs required for Code Pipeline deployment list are missing. ' +
+      '\nSkipping the deployment list request....');
+  }
 
   let requestBasePath = `/ispw/${inputs.srid}/deployments`;
   let requestQueryPath = prepareRequestQueryPath(inputs);
@@ -57,11 +65,26 @@ try
 } 
 catch (error) 
 {
+  if (error instanceof MissingArgumentException) 
+  {
+    console.log(error.message);
+  } 
+  else 
+  {
     core.info(error.stack);
     console.error('An error occurred while calling the deployment list');
     core.setFailed(error.message);
+  }
 }
 
+function validateRequiredParms(requiredFields, inputs) {
+  requiredFields.forEach((field) => {
+    if (!stringHasContent(inputs.field)) {
+      isValid = false;
+      console.error(getMissingInputMessage(field));
+    }
+  });
+}
 /**
  * Gets a promise for sending an http GET request
  * @param {URL} requestUrl the URL to send hte request to
@@ -164,11 +187,11 @@ function setOutputs(core, responseBody) {
 
 /**
  * Examines the given response body to determine whether an error occurred
- * during the generate.
+ * during the deployment list request.
  * @param {*} responseBody The body returned from the CES request
- * @return {*} The response body object if the generate was successful,
+ * @return {*} The response body object if the deployment list was successful,
  * else throws an error
- * @throws GenerateFailureException if there were failures during the generate
+ * @throws DeploymentListFailureException if there were failures during the deployment list
  */
 function handleResponseBody(responseBody) {
   if (responseBody === undefined) {
@@ -179,12 +202,23 @@ function handleResponseBody(responseBody) {
   else 
   {
     // success
+    utils.validateBuildParms(buildParms, requiredFields)
     return responseBody;
   }
 }
 
 /**
- * Error to throw when the response for the generate request is incomplete
+ * Error to throw when not all the arguments have been specified for the action.
+ * @param  {string} message the message associated with the error
+ */
+function MissingArgumentException(message) {
+  this.message = message;
+  this.name = 'MissingArgumentException';
+}
+MissingArgumentException.prototype = Object.create(Error.prototype);
+
+/**
+ * Error to throw when the response for the deployment list request is incomplete
  *  or indicates errors.
  * @param  {string} message the message associated with the error
  */
@@ -199,6 +233,7 @@ module.exports = {
   setOutputs,
   handleResponseBody,
   DeploymentListFailureException,
+  MissingArgumentException
 };
 
 
