@@ -18,7 +18,7 @@ try
   core.info('Code Pipeline: parsed inputs: ' + utils.convertObjectToJson(inputs));
   
   const requiredFields = ['ces_url', 'ces_token', 'srid'];
-  if (!validateRequiredParms(requiredFields, inputs)) 
+  if (!validateRequiredParms(inputs.ces_url, inputs.ces_token, inputs.srid)) 
   {
     throw new MissingArgumentException(
         'Inputs required for Code Pipeline deployment list are missing. ' +
@@ -62,6 +62,7 @@ catch (error)
   if (error instanceof MissingArgumentException) 
   {
     console.log(error.message);
+    core.setFailed(error.message);
   } 
   else 
   {
@@ -71,14 +72,28 @@ catch (error)
   }
 }
 
-function validateRequiredParms(requiredFields, inputs) {
-  requiredFields.forEach((field) => {
-    if (!utils.stringHasContent(inputs.field)) {
-      isValid = false;
-      console.error(`Missing input:${field} must be specified.`);
-      //console.error(getMissingInputMessage(field));
-    }
-  });
+function validateRequiredParms(ces_url, ces_token, srid) 
+{
+  let isValid = true;
+  if (!utils.stringHasContent(ces_url)) 
+  {
+    isValid = false;
+    console.error(`Missing input:ces_url must be specified.`); 
+  }
+  
+  if (!utils.stringHasContent(ces_token)) 
+  {
+    isValid = false;
+    console.error(`Missing input:ces_token must be specified.`); 
+  }
+  
+  if (!utils.stringHasContent(srid)) 
+  {
+    isValid = false;
+    console.error(`Missing input:srid must be specified.`); 
+  }
+  
+  return isValid;
 }
 
 /**
