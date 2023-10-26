@@ -126,6 +126,11 @@ function prepareRequestQueryPath(inputs)
     requestQueryPath= requestQueryPath.concat(`todaysDate=${inputs.todaysDate}&`);
     console.log("JAlaj In today's date requestQueryPath: "+ requestQueryPath);
   }
+  if (utils.stringHasContent(inputs.priorWeek)) 
+  {
+    requestQueryPath= requestQueryPath.concat(`priorWeek=${inputs.priorWeek}&`);
+    console.log("JAlaj In priorWeek requestQueryPath: "+ requestQueryPath);
+  }
   if (utils.stringHasContent(inputs.startDate)) 
   {
     requestQueryPath= requestQueryPath.concat(`startDate=${inputs.startDate}&`);
