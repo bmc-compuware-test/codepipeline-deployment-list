@@ -4,7 +4,7 @@ The Code Pipeline Deployment List action allows your GitHub Actions workflow to 
 
 ## Example usage
 
-The following example retrieves all the deployments using default filter- priorWeek=true
+The following example retrieves all the deployments using default filter : priorWeek=true
 
 ``` yaml
 on: [push]
@@ -15,7 +15,7 @@ jobs:
     name: A job to get deployment list of Code Pipeline.
     steps:
       - name: Deployment List
-        uses: bmc-compuware/code-pipiline-deployment-list@v1.3
+        uses: bmc-compuware/code-pipeline-deployment-list@v1.3
         id: deploymentlist
         with:
           ces_url: 'http://CES:48080/'
