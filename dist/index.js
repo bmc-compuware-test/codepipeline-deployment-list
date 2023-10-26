@@ -27,7 +27,7 @@ try
   if (!validateRequiredParms(inputs.ces_url, inputs.ces_token, inputs.srid)) 
   {
     throw new MissingArgumentException(
-        'Mandatory Inputs (ces_url, ces_token, srid) for Code Pipeline deployment list is/are missing. ' +
+        'Inputs required for Code Pipeline deployment list are missing. ' +
       '\nSkipping the deployment list request....');
   }
 
