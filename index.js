@@ -113,36 +113,50 @@ function getHttpGetPromise(requestUrl, token) {
 
 function prepareRequestQueryPath(inputs)
 {
+  console.log("JAlaj Inputs: "+ inputs);
   let requestQueryPath ="?";
+  if (utils.stringHasContent(inputs.todaysDate)) 
+  {
+    requestQueryPath= requestQueryPath.concat(`todaysDate=${inputs.todaysDate}&`);
+    console.log("JAlaj In today's date requestQueryPath: "+ requestQueryPath);
+  }
   if (utils.stringHasContent(inputs.startDate)) 
   {
     requestQueryPath= requestQueryPath.concat(`startDate=${inputs.startDate}&`);
+    console.log("JAlaj In start date requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.endDate)) 
   {
     requestQueryPath= requestQueryPath.concat(`endDate=${inputs.endDate}&`);
+    console.log("JAlaj In end date requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.requestId)) 
   {
     requestQueryPath= requestQueryPath.concat(`requestId=${inputs.requestId}&`);
+    console.log("JAlaj In requestId requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.setId)) 
   {
     requestQueryPath=requestQueryPath.concat(`setId=${inputs.setId}&`);
+    console.log("JAlaj In setId requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.environment)) 
   {
     requestQueryPath=requestQueryPath.concat(`environment=${inputs.environment}&`);
+    console.log("JAlaj In environment requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.status)) 
   {
     requestQueryPath=requestQueryPath.concat(`status=${inputs.status}&`);
+    console.log("JAlaj In status requestQueryPath: "+ requestQueryPath);
   }
   if(requestQueryPath.endsWith('&') || requestQueryPath.endsWith('?') || requestQueryPath.endsWith('?&') )
   {
+    console.log("JAlaj In after ends with requestQueryPath: "+ requestQueryPath);
     requestQueryPath = requestQueryPath.substring(0, requestQueryPath.length - 1);
+    console.log("JAlaj In after ends with requestQueryPath: "+ requestQueryPath);
   }
-  core.info('Code Pipeline: Request Query Url PAth: ' + requestQueryPath);
+  core.info('Code Pipeline: Final Request Query Url PAth: ' + requestQueryPath);
   return requestQueryPath;
 }
 
