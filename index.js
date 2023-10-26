@@ -21,7 +21,7 @@ try
   if (!validateRequiredParms(inputs.ces_url, inputs.ces_token, inputs.srid)) 
   {
     throw new MissingArgumentException(
-        'Inputs required for Code Pipeline deployment list are missing. ' +
+        'Mandatory Inputs (ces_url, ces_token, srid) for Code Pipeline deployment list is/are missing. ' +
       '\nSkipping the deployment list request....');
   }
 
@@ -113,55 +113,44 @@ function getHttpGetPromise(requestUrl, token) {
 
 function prepareRequestQueryPath(inputs)
 {
-  console.log("JAlaj Inputs: "+ inputs);
   let requestQueryPath ="?";
   if (utils.stringHasContent(inputs.todaysDate)) 
   {
     requestQueryPath= requestQueryPath.concat(`todaysDate=${inputs.todaysDate}&`);
-    console.log("JAlaj In today's date requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.priorWeek)) 
   {
     requestQueryPath= requestQueryPath.concat(`priorWeek=${inputs.priorWeek}&`);
-    console.log("JAlaj In priorWeek requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.startDate)) 
   {
     requestQueryPath= requestQueryPath.concat(`startDate=${inputs.startDate}&`);
-    console.log("JAlaj In start date requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.endDate)) 
   {
     requestQueryPath= requestQueryPath.concat(`endDate=${inputs.endDate}&`);
-    console.log("JAlaj In end date requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.requestId)) 
   {
     requestQueryPath= requestQueryPath.concat(`requestId=${inputs.requestId}&`);
-    console.log("JAlaj In requestId requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.setId)) 
   {
     requestQueryPath=requestQueryPath.concat(`setId=${inputs.setId}&`);
-    console.log("JAlaj In setId requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.environment)) 
   {
     requestQueryPath=requestQueryPath.concat(`environment=${inputs.environment}&`);
-    console.log("JAlaj In environment requestQueryPath: "+ requestQueryPath);
   }
   if (utils.stringHasContent(inputs.status)) 
   {
     requestQueryPath=requestQueryPath.concat(`status=${inputs.status}&`);
-    console.log("JAlaj In status requestQueryPath: "+ requestQueryPath);
   }
   if(requestQueryPath.endsWith('&') || requestQueryPath.endsWith('?') || requestQueryPath.endsWith('?&') )
   {
-    console.log("JAlaj In after ends with requestQueryPath: "+ requestQueryPath);
     requestQueryPath = requestQueryPath.substring(0, requestQueryPath.length - 1);
-    console.log("JAlaj In after ends with requestQueryPath: "+ requestQueryPath);
   }
-  core.info('Code Pipeline: Final Request Query Url PAth: ' + requestQueryPath);
+  core.debug('Code Pipeline: Final Request Query Url PAth: ' + requestQueryPath);
   return requestQueryPath;
 }
 
@@ -173,20 +162,20 @@ function prepareRequestUrl(cesUrl, requestBasePath, requestQueryPath)
   const cpwrIndex = lowercaseUrl.lastIndexOf('/compuware');
   if (cpwrIndex > 0) 
   {
-    cesUrl = cesUrl.substr(0, cpwrIndex);
+    cesUrl = cesUrl.substring(0, cpwrIndex);
   }
 
   // remove trailing '/bmc' from url, if it exists
   const bmcIndex = lowercaseUrl.lastIndexOf('/bmc');
   if (bmcIndex > 0) 
   {
-    cesUrl = cesUrl.substr(0, bmcIndex);
+    cesUrl = cesUrl.substring(0, bmcIndex);
   }
     
   // remove trailing slash
   if (cesUrl.endsWith('/')) 
   {
-    cesUrl = cesUrl.substr(0, cesUrl.length - 1);
+    cesUrl = cesUrl.substring(0, cesUrl.length - 1);
   }
 
   const tempUrlStr = cesUrl.concat(requestBasePath, requestQueryPath);
@@ -258,8 +247,7 @@ DeploymentListFailureException.prototype = Object.create(Error.prototype);
 
 
 module.exports = {
-  setOutputs,
   handleResponseBody,
   DeploymentListFailureException,
-  MissingArgumentException
+  validateRequiredParms
 };
